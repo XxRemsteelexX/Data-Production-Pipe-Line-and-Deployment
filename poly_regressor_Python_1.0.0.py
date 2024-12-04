@@ -15,14 +15,15 @@
 # Dependencies:
 # * cleaned_data.csv is the input data file, structured appropriately.  The structure of this data file must be:
 # 
-# Outputs:
-# * log file named "polynomial_regression.txt" containing information about the model training process
-# * MLFlow experiment named with current date containing model training runs, one for each value of the Ridge regression penalty
-# 
 # | YEAR | MONTH | DAY | DAY_OF_WEEK | ORG_AIRPORT | DEST_AIRPORT | SCHEDULED_DEPARTURE | DEPARTURE_TIME | DEPARTURE_DELAY | SCHEDULED_ARRIVAL | ARRIVAL_TIME | ARRIVAL_DELAY |
 # |:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|
 # | integer | integer | integer | integer | string | string | integer | integer | integer | integer | integer | integer |
 # 
+# Outputs:
+# * log file named "polynomial_regression.txt" containing information about the model training process
+# * MLFlow experiment named with current date containing model training runs, one for each value of the Ridge regression penalty
+# 
+
 
 # Here we import the packages we will need
 import datetime
