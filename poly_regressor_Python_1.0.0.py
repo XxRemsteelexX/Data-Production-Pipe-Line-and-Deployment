@@ -358,8 +358,15 @@ import mlflow.sklearn
 from sklearn.linear_model import Ridge
 from sklearn.model_selection import GridSearchCV
 
+#  Ensure any active MLFlow run is ended before starting a new one
 if mlflow.active_run():
     mlflow.end_run()
+
+# Explicitly set the experiment
+mlflow.set_experiment("Airport_Delay_Prediction")
+
+# Retrieve the experiment again to avoid ID mismatches
+experiment = mlflow.get_experiment_by_name("Airport_Delay_Prediction")
 
 # Define hyperparameter grid
 alpha_values = [0.001, 0.01, 0.1, 1, 10]

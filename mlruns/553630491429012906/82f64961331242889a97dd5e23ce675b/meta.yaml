@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/remsteele/Desktop/WGU_Capstone/D602-Airline-Delay-Prediction/d602-deployment-task-2/mlruns/553630491429012906/82f64961331242889a97dd5e23ce675b/artifacts
+end_time: 1739744917836
+entry_point_name: ''
+experiment_id: '553630491429012906'
+lifecycle_stage: active
+run_id: 82f64961331242889a97dd5e23ce675b
+run_name: Training Run Number 18
+run_uuid: 82f64961331242889a97dd5e23ce675b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1739744917783
+status: 3
+tags: []
+user_id: remsteele
