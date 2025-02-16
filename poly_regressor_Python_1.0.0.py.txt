@@ -353,15 +353,22 @@ plt.savefig("model_performance_test.jpg",dpi=300)
 logging.info("Model performance plot export successful")
 
 
-# TO DO: create an MLFlow run within the current experiment that logs the following as artifacts, parameters, 
-# or metrics, as appropriate, within the experiment: 
-# 1.  The informational log files generated from the import_data and clean_data scripts
-# 2.  the input parameters (alpha and order) to the final regression against the test data
-# 3.  the performance plot
-# 4.  the model performance metrics (mean squared error and the average delay in minutes)
-
+import mlflow
+import mlflow.sklearn
 with mlflow.start_run(experiment_id = experiment.experiment_id, run_name = "Final Model - Test Data"):
-    # YOUR CODE GOES HERE
+    # input parameters
+    mlflow.log_param("alpha", best_alpha)  
+    mlflow.log_param("polynomial_order", polynomial_order)  
+
+    #performance metrics
+    mlflow.log_metric("RMSE", best_rmse) 
+    mlflow.log_metric("MSE", best_mse) 
+    mlflow.log_metric("Mean Delay (min)", best_mean_delay)  
+
+    # model artifacts
+    mlflow.sklearn.log_model(final_model, "model")  
+    mlflow.log_artifact("model_performance.png")  
+    mlflow.log_artifact("polynomial_regression.txt")
 mlflow.end_run()
 
 logging.shutdown()
