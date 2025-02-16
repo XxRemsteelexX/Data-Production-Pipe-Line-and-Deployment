@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/remsteele/Desktop/WGU_Capstone/D602-Airline-Delay-Prediction/d602-deployment-task-2/mlruns/0/982c64d35c8f448399985b0775294263/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 982c64d35c8f448399985b0775294263
+run_name: angry-moth-951
+run_uuid: 982c64d35c8f448399985b0775294263
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1739738950124
+status: 1
+tags: []
+user_id: remsteele

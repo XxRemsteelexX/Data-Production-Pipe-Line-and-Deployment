@@ -342,7 +342,7 @@ logging.info("Final model export successful")
 
 # create and export model performance plot
 tips = pd.DataFrame()
-tips["prediction"] = pd.Series([float(s) for s in result[:,0]]) 
+tips["prediction"] = pd.Series([float(s) for s in result]) 
 tips["original_data"] = pd.Series([float(s) for s in Y[:,0]]) 
 sns.jointplot(x="original_data", y="prediction", data=tips, height = 6, ratio = 7,
               joint_kws={'line_kws':{'color':'limegreen'}}, kind='reg')
@@ -355,20 +355,44 @@ logging.info("Model performance plot export successful")
 
 import mlflow
 import mlflow.sklearn
+from sklearn.linear_model import Ridge
+from sklearn.model_selection import GridSearchCV
+
+if mlflow.active_run():
+    mlflow.end_run()
+
+# Define hyperparameter grid
+alpha_values = [0.001, 0.01, 0.1, 1, 10]
+
 with mlflow.start_run(experiment_id = experiment.experiment_id, run_name = "Final Model - Test Data"):
     # input parameters
-    mlflow.log_param("alpha", best_alpha)  
-    mlflow.log_param("polynomial_order", polynomial_order)  
-
-    #performance metrics
-    mlflow.log_metric("RMSE", best_rmse) 
-    mlflow.log_metric("MSE", best_mse) 
-    mlflow.log_metric("Mean Delay (min)", best_mean_delay)  
-
-    # model artifacts
-    mlflow.sklearn.log_model(final_model, "model")  
-    mlflow.log_artifact("model_performance.png")  
+    mlflow.log_param("alpha", parameters[0]/10)
+    mlflow.log_param("polynomial_order", order)
+    
+    # performance metrics
+    mlflow.log_metric("RMSE", np.sqrt(score))
+    mlflow.log_metric("MSE", score)
+    mlflow.log_metric("mean_delay_minutes", np.mean(np.abs(result - Y_test)))
+    
+    # Transform input example using polynomial features
+    input_example = X_test[0:2]  # Take first two rows as example
+    input_example_transformed = poly.transform(input_example)
+    
+    # Create signature using transformed features
+    signature = mlflow.models.infer_signature(
+        input_example_transformed,  # Input example after polynomial transformation
+        result[0:2]                # Corresponding outputs
+    )
+    
+    mlflow.sklearn.log_model(
+        ridgereg, 
+        "model",
+        signature=signature,
+        input_example=input_example_transformed
+    )
+    mlflow.log_artifact("model_performance_test.jpg")
     mlflow.log_artifact("polynomial_regression.txt")
+
 mlflow.end_run()
 
 logging.shutdown()
