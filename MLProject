@@ -4,12 +4,11 @@ dependencies:
   - conda: pipeline_env.yaml
 
 entry_points:
+  main:
+    command: "python poly_regressor_Python_1.0.0.py"  # Define main entry point
   import_data:
     command: "python data_import.py"
-
   clean_data:
     command: "python data_cleaning.py"
-
   train_model:
     command: "python poly_regressor_Python_1.0.0.py"
- 
