@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # coding: utf-8
-print('hello')
 
 # <h1>Model to predict airport flight delays</h1>
 # 
@@ -16,14 +15,15 @@ print('hello')
 # Dependencies:
 # * cleaned_data.csv is the input data file, structured appropriately.  The structure of this data file must be:
 # 
-# Outputs:
-# * log file named "polynomial_regression.txt" containing information about the model training process
-# * MLFlow experiment named with current date containing model training runs, one for each value of the Ridge regression penalty
-# 
 # | YEAR | MONTH | DAY | DAY_OF_WEEK | ORG_AIRPORT | DEST_AIRPORT | SCHEDULED_DEPARTURE | DEPARTURE_TIME | DEPARTURE_DELAY | SCHEDULED_ARRIVAL | ARRIVAL_TIME | ARRIVAL_DELAY |
 # |:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|
 # | integer | integer | integer | integer | string | string | integer | integer | integer | integer | integer | integer |
 # 
+# Outputs:
+# * log file named "polynomial_regression.txt" containing information about the model training process
+# * MLFlow experiment named with current date containing model training runs, one for each value of the Ridge regression penalty
+# 
+
 
 # Here we import the packages we will need
 import datetime
@@ -352,56 +352,60 @@ plt.plot(list(range(-10,25)), list(range(-10,25)), linestyle = ':', color = 'r')
 plt.savefig("model_performance_test.jpg",dpi=300)
 logging.info("Model performance plot export successful")
 
-
+import os
 import mlflow
 import mlflow.sklearn
 from sklearn.linear_model import Ridge
 from sklearn.model_selection import GridSearchCV
+import mlflow
 
-#  Ensure any active MLFlow run is ended before starting a new one
+if mlflow.active_run():
+    print("⚠️ Active MLFlow run found. Ending it before starting a new one...")
+    mlflow.end_run()
+
+try:
+    # ✅ Explicitly set the experiment name
+    mlflow.set_experiment("Airport_Delay_Prediction")
+    # ✅ Get experiment details to avoid ID mismatches
+    experiment = mlflow.get_experiment_by_name("Airport_Delay_Prediction")
+    print(f"✅ Using Experiment: {experiment.experiment_id}")
+
+    # Define hyperparameter grid
+    alpha_values = [0.001, 0.01, 0.1, 1, 10]
+# Remove previous run if exists
 if mlflow.active_run():
     mlflow.end_run()
 
-# Explicitly set the experiment
-mlflow.set_experiment("Airport_Delay_Prediction")
+# Log parameters
+mlflow.log_param("alpha", parameters[0]/10)
+mlflow.log_param("polynomial_order", order)
 
-# Retrieve the experiment again to avoid ID mismatches
-experiment = mlflow.get_experiment_by_name("Airport_Delay_Prediction")
+# Log metrics
+mlflow.log_metric("RMSE", np.sqrt(score))
+mlflow.log_metric("MSE", score)
+mlflow.log_metric("mean_delay_minutes", np.mean(np.abs(result - Y_test)))
 
-# Define hyperparameter grid
-alpha_values = [0.001, 0.01, 0.1, 1, 10]
+# Transform input example using polynomial features
+input_example = X_test[0:2]
+input_example_transformed = poly.transform(input_example)
 
-with mlflow.start_run(experiment_id = experiment.experiment_id, run_name = "Final Model - Test Data"):
-    # input parameters
-    mlflow.log_param("alpha", parameters[0]/10)
-    mlflow.log_param("polynomial_order", order)
-    
-    # performance metrics
-    mlflow.log_metric("RMSE", np.sqrt(score))
-    mlflow.log_metric("MSE", score)
-    mlflow.log_metric("mean_delay_minutes", np.mean(np.abs(result - Y_test)))
-    
-    # Transform input example using polynomial features
-    input_example = X_test[0:2]  # Take first two rows as example
-    input_example_transformed = poly.transform(input_example)
-    
-    # Create signature using transformed features
-    signature = mlflow.models.infer_signature(
-        input_example_transformed,  # Input example after polynomial transformation
-        result[0:2]                # Corresponding outputs
-    )
-    
-    mlflow.sklearn.log_model(
-        ridgereg, 
-        "model",
-        signature=signature,
-        input_example=input_example_transformed
-    )
-    mlflow.log_artifact("model_performance_test.jpg")
-    mlflow.log_artifact("polynomial_regression.txt")
+# Create signature using transformed features
+signature = mlflow.models.infer_signature(
+    input_example_transformed,
+    result[0:2]
+)
 
-mlflow.end_run()
+# Log model with signature
+mlflow.sklearn.log_model(
+    ridgereg, 
+    "model",
+    signature=signature,
+    input_example=input_example_transformed
+)
 
-logging.shutdown()
-import sys
+# Log artifacts
+mlflow.log_artifact(os.path.abspath("model_performance_test.jpg"))
+mlflow.log_artifact(os.path.abspath("polynomial_regression.txt"))
+
+print("✅ Script completed successfully! Exiting...")
 sys.exit(0)
