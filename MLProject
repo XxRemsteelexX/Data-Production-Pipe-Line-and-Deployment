@@ -1,0 +1,11 @@
+name: airport_delay_prediction
+
+entry_points:
+  data_cleaning:
+    command: "python data_cleaning.py"
+
+  train_model:
+    command: "python poly_regressor_Python_1.0.0.py"
+
+  main:
+    command: "python data_cleaning.py && python poly_regressor_Python_1.0.0.py"
