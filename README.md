@@ -20,32 +20,32 @@ airline delays cost the aviation industry billions annually. this project develo
 
 ```
 airline-delay-pipeline/
-├── data/
-│   ├── T_ONTIME_REPORTING.csv.dvc     # versioned raw data
-│   ├── cleaned_data.csv               # processed training data
-│   └── cleaned_ord_data.csv           # cleaned test data
-├── models/
-│   ├── polynomial_regression_model.py  # python implementation
-│   ├── polynomial_regression_model.R   # r implementation
-│   ├── polynomial_regression_model.Rmd # r markdown analysis
-│   └── finalized_model.pkl             # trained model artifact
-├── notebooks/
-│   ├── airline_delay_prediction.ipynb  # main analysis notebook
-│   └── polynomial_regression_model.ipynb # model development
-├── pipeline/
-│   ├── data_cleaning.py                # data preprocessing
-│   ├── MLProject                       # mlflow project config
-│   └── reset_mlflow.py                 # mlflow utilities
-├── artifacts/
-│   ├── airport_encodings.json          # categorical encodings
-│   ├── model_performance_test.jpg      # performance visualization
-│   ├── polynomial_regression.txt       # training logs
-│   └── mlruns/                         # mlflow experiment tracking
-├── config/
-│   ├── pipeline_env.yaml               # python environment
-│   ├── pipeline_env_r.yaml             # r environment
-│   └── .dvcignore                      # dvc configuration
-└── README.md
+|-- data/
+|   |-- T_ONTIME_REPORTING.csv.dvc     # versioned raw data
+|   |-- cleaned_data.csv               # processed training data
+|   \-- cleaned_ord_data.csv           # cleaned test data
+|-- models/
+|   |-- polynomial_regression_model.py  # python implementation
+|   |-- polynomial_regression_model.R   # r implementation
+|   |-- polynomial_regression_model.Rmd # r markdown analysis
+|   \-- finalized_model.pkl             # trained model artifact
+|-- notebooks/
+|   |-- airline_delay_prediction.ipynb  # main analysis notebook
+|   \-- polynomial_regression_model.ipynb # model development
+|-- pipeline/
+|   |-- data_cleaning.py                # data preprocessing
+|   |-- MLProject                       # mlflow project config
+|   \-- reset_mlflow.py                 # mlflow utilities
+|-- artifacts/
+|   |-- airport_encodings.json          # categorical encodings
+|   |-- model_performance_test.jpg      # performance visualization
+|   |-- polynomial_regression.txt       # training logs
+|   \-- mlruns/                         # mlflow experiment tracking
+|-- config/
+|   |-- pipeline_env.yaml               # python environment
+|   |-- pipeline_env_r.yaml             # r environment
+|   \-- .dvcignore                      # dvc configuration
+\-- README.md
 ```
 
 ## methodology
@@ -87,8 +87,8 @@ airline-delay-pipeline/
 ## results
 
 ### model performance
-- **training mse**: 125.3 minutes²
-- **validation mse**: 138.7 minutes²
+- **training mse**: 125.3 minutes^2
+- **validation mse**: 138.7 minutes^2
 - **test rmse**: 11.8 minutes average prediction error
 - **model complexity**: degree 1 polynomial with optimal alpha = 1.2
 
